@@ -38,38 +38,30 @@ public:
 	{
 		return scale;
 	}
-
 	void DrawLine(JC_Point2d P_in, JC_Point2d Q_in, Color Color_in)
 	{
 		P_in -= Camera_Pos;
 		Q_in -= Camera_Pos;
 		ct.DrawLine(std::move(P_in), std::move(Q_in), std::move(Color_in));
 	}
-	void DrawPoliLine(std::vector<JC_Point2d> point_data, Color Color_in)
+	void DrawPoliLine(std::vector<JC_Point2d> PointData, Color Color_in)
 	{
-		for (auto &P : point_data)
+		for (auto &P : PointData)
 		{
 			P -= Camera_Pos;
 		}
 
-		ct.DrawPoliLine(std::move(point_data), std::move(Color_in));
+		ct.DrawPoliLine(std::move(PointData), std::move(Color_in));
 	}
-	void DrawBezier(JC_Point2d P_in, JC_Point2d Q_in, JC_Point2d R_in, Color Color_in)
+	
+	void DrawMPBezier(std::vector<JC_Point2d> PointData, Color Color_in)
 	{
-		P_in -= Camera_Pos;
-		Q_in -= Camera_Pos;
-		R_in -= Camera_Pos;
-		ct.DrawBezier(std::move(P_in), std::move(Q_in), std::move(R_in) ,std::move(Color_in));
-	}
-
-	void DrawMPBezier(std::vector<JC_Point2d> point_data, Color Color_in)
-	{
-		for (auto &P : point_data)
+		for (auto &P : PointData)
 		{
 			P -= Camera_Pos;
 		}
 
-		ct.DrawMPBezier(std::move(point_data), std::move(Color_in));
+		ct.DrawMPBezier(std::move(PointData), std::move(Color_in));
 	}
 
 	void DrawCircle(JC_Point2d pos, double radius, int t, Color Color_in)

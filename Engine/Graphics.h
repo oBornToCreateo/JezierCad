@@ -64,24 +64,18 @@ public:
 	}
 	void PutPixel( int x,int y,Color c );
 
-	
-	/***** Start Draw Line Functions *****/
 
-	
+	/***** Start Draw Line Functions *****/
 	void DrawLine(const JC_Point2d& P, const JC_Point2d& Q, Color c)
 	{
 		DrawLine(P.x, P.y, Q.x, Q.y, c);
 	}
 	void DrawLine(double x1, double y1, double x2, double y2, Color c);
-
 	void DrawPoliLine(std::vector<JC_Point2d> point_data, Color Color_in);
-
 	/***** END Draw Line Functions ****/
 
 
-
 	/***** Start Draw Circle Functions *****/
-
 	template<typename T2>
 	void DrawCircle(JC_Point2<T2> vO, T2 R, int t , Color c)
 	{
@@ -89,27 +83,25 @@ public:
 		DrawCircle((double)vO.x, (double)vO.y, (double)R, Bound, t, c);
 	}
 	void DrawCircle(double _ox, double _oy, double _outer_radius, const CRectangle<double>& _clip, int t, Color _color) noexcept;
-
-	//void DrawCircle(double Ox, double Oy, double R, Color& c);
-
 	/***** END Draw Circle Functions ****/
 
 
-
-
+	/***** Start DrawBezier Curve *****/
 	void DrawBezier(const JC_Point2d & P, const JC_Point2d & Q, const JC_Point2d & R, Color color) noexcept;
-	void DrawBezier(const std::vector<JC_Point2d> point_data, Color color) noexcept;
+	void DrawMPBezier(const std::vector<JC_Point2d> point_data, Color color) noexcept;
+	/***** End DrawBezier Curve *****/
 	
-	
-
-
+		
 	/***** Start Draw Arc Functions *****/
-	
-	//void DrawArc(double Ox, double Oy, double R, double theta_begin, double theta_end, Color c);
-	
 	/***** End Draw Arc Functions *****/
-
+		
 	~Graphics();
+
+	void DrawTriangle(const JC_Point2d& v0, const JC_Point2d& v1, const JC_Point2d& v2, Color c);
+	
+private:
+	void DrawFlatTopTriangle(const JC_Point2d& v0, const JC_Point2d& v1, const JC_Point2d& v2, Color c);
+	void DrawFlatBottomTriangle(const JC_Point2d& v0, const JC_Point2d& v1, const JC_Point2d& v2, Color c);
 private:
 	Microsoft::WRL::ComPtr<IDXGISwapChain>				pSwapChain;
 	Microsoft::WRL::ComPtr<ID3D11Device>				pDevice;

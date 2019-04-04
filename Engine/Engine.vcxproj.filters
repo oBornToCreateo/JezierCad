@@ -87,9 +87,6 @@
     <ClInclude Include="JC_Shape.h">
       <Filter>Header Files\Geometric shapes</Filter>
     </ClInclude>
-    <ClInclude Include="JC_Line.h">
-      <Filter>Header Files\Geometric shapes</Filter>
-    </ClInclude>
     <ClInclude Include="JC_Math.h">
       <Filter>Header Files\MathLib</Filter>
     </ClInclude>

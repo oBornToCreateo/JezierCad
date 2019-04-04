@@ -63,12 +63,15 @@ void Game::ProcesInput()
 					
 					first_point_engagement = true;
 					P = cam.TrasformPoint(wnd.mouse.GetPos());
+					PointData.emplace_back(P);
+
 				}
 				if (input == 1)
 				{
-					Q = wnd.mouse.GetPos();
-					Q = cam.TrasformPoint(Q);
-					Shapes.push_back(std::make_unique<JC_Circle>(P, Q));
+					
+					Q = cam.TrasformPoint(wnd.mouse.GetPos());
+					PointData.emplace_back(Q);
+					Shapes.push_back(std::make_unique<JC_Circle>(PointData));
 					//Shapes.push_back(std::make_unique<JC_Line>(P, Q));
 				}
 
@@ -78,20 +81,25 @@ void Game::ProcesInput()
 				{
 					input = 0;
 					first_point_engagement = false;
+					PointData.clear();
+
 				}
 			}
 			if (e.GetType() == Mouse::Event::Type::RPress)
 			{
 				input = 0;
 				first_point_engagement = false;
+				PointData.clear();
+
 			}
 		}
 		if (first_point_engagement)
 		{
 			
 			Q = cam.TrasformPoint(wnd.mouse.GetPos());
-			cam.DrawCircle(P, GetDistanceTo(P, Q), 2, Colors::Red);
-			cam.DrawLine(P, Q, Colors::Red);
+		
+			cam.DrawCircle(P , GetDistanceTo(P,Q), 2, Colors::Red);
+			cam.DrawPoliLine(PointData, Colors::Red);
 		}
 		break;
 	}
@@ -107,19 +115,23 @@ void Game::ProcesInput()
 				{
 					first_point_engagement = true;
 					P = cam.TrasformPoint(wnd.mouse.GetPos());
+					PointData.emplace_back(P);
 				}
 
 				if (input == 1)
 				{
 					second_point_engagement = true;
 					Q = cam.TrasformPoint(wnd.mouse.GetPos());
+					PointData.emplace_back(Q);
+
 				}
 
 				if (input == 2)
 				{
 					R = cam.TrasformPoint(wnd.mouse.GetPos());
+					PointData.emplace_back(R);
 					if (P != Q && Q != R && !(LineSlopeBetween2Points(P, R) == LineSlopeBetween2Points(R, Q)))
-						Shapes.push_back(std::make_unique<JC_Circle>(P, Q, R));
+						Shapes.push_back(std::make_unique<JC_Circle>(PointData));
 				}
 
 				input++;
@@ -128,6 +140,7 @@ void Game::ProcesInput()
 				{
 					input = 0;
 					second_point_engagement = false;
+					PointData.clear();
 				}
 			}
 			if (e.GetType() == Mouse::Event::Type::RPress)
@@ -135,6 +148,8 @@ void Game::ProcesInput()
 				input = 0;
 				first_point_engagement = false;
 				second_point_engagement = false;
+				PointData.clear();
+
 			}
 		}
 		//Draw circle from two points when left mouse button is pressed for the first time
@@ -166,47 +181,7 @@ void Game::ProcesInput()
 		}
 		break;
 	}
-	case MainWindow::MWShapeState::LineSegment:
-	{
-		while (!wnd.mouse.IsEmpty())
-		{
-			const auto e = wnd.mouse.Read();
 
-			if (e.GetType() == Mouse::Event::Type::LPress)
-			{
-				if (input == 0)
-				{
-					first_point_engagement = true;
-					P = cam.TrasformPoint(wnd.mouse.GetPos());
-				}
-				if (input == 1)
-				{
-					first_point_engagement = false;
-					Q = cam.TrasformPoint(wnd.mouse.GetPos());
-					Shapes.push_back(std::make_unique<JC_Line>(P, Q));
-				}
-
-				input++;
-
-				if (input >= 2)
-				{
-					input = 0;
-					first_point_engagement = false;
-				}
-			}
-			if (e.GetType() == Mouse::Event::Type::RPress)
-			{
-		
-				first_point_engagement = false;
-			}
-		}
-		if (first_point_engagement)
-		{
-			Q = cam.TrasformPoint(wnd.mouse.GetPos());
-			cam.DrawLine(P, Q, Colors::Red);
-		}
-		break;
-	}
 	case MainWindow::MWShapeState::PoliLine:
 	{
 		while (!wnd.mouse.IsEmpty())
@@ -224,7 +199,7 @@ void Game::ProcesInput()
 				}
 
 				P = cam.TrasformPoint(wnd.mouse.GetPos());
-				point_data.push_back(P);
+				PointData.push_back(P);
 				input++;
 
 				
@@ -234,13 +209,13 @@ void Game::ProcesInput()
 				if (e.GetType() == Mouse::Event::Type::RPress)
 				{
 
-					if (point_data.size() > 1)
+					if (PointData.size() > 1)
 					{
-						Shapes.push_back(std::make_unique<JC_Poliline>(point_data));
+						Shapes.push_back(std::make_unique<JC_Poliline>(PointData));
 						input = 0;
 						first_point_engagement = false;
 						second_point_engagement = false;
-						point_data.clear();
+						PointData.clear();
 
 					}
 
@@ -256,7 +231,7 @@ void Game::ProcesInput()
 		}
 		if (second_point_engagement)
 		{
-			cam.DrawPoliLine(point_data, Colors::Red);
+			cam.DrawPoliLine(PointData, Colors::Red);
 			Q = cam.TrasformPoint(wnd.mouse.GetPos());
 			cam.DrawLine(P, Q, Colors::Red);
 
@@ -264,63 +239,8 @@ void Game::ProcesInput()
 		break;
 
 	}
-	case MainWindow::MWShapeState::BezierCurve:
-	{
-		while (!wnd.mouse.IsEmpty())
-		{
-			const auto e = wnd.mouse.Read();
 
-			if (e.GetType() == Mouse::Event::Type::LPress)
-			{
-				if (input == 0)
-				{
-					first_point_engagement = true;
-					P = cam.TrasformPoint(wnd.mouse.GetPos());
-				}
 
-				if (input == 1)
-				{
-					second_point_engagement = true;
-					R = cam.TrasformPoint(wnd.mouse.GetPos());
-				}
-
-				if (input == 2)
-				{
-					Q = cam.TrasformPoint(wnd.mouse.GetPos());
-					Shapes.push_back(std::make_unique<ALIB_Bezier>(P, Q, R));
-				}
-
-				input++;
-
-				if (input >= 3)
-				{
-					input = 0;
-					second_point_engagement = false;
-				}
-			}
-			if (e.GetType() == Mouse::Event::Type::RPress)
-			{
-				input = 0;
-				first_point_engagement = false;
-				second_point_engagement = false;
-			}
-		}
-		//Draw bezier from two points when left mouse button is pressed for the first time
-		if (first_point_engagement)
-		{
-			R = cam.TrasformPoint(wnd.mouse.GetPos());
-			cam.DrawLine(P,R, Colors::Red);
-		}
-		if (second_point_engagement)
-		{
-			first_point_engagement = false;
-			Q = cam.TrasformPoint(wnd.mouse.GetPos());
-			
-			cam.DrawBezier(P,Q, R ,Colors::Red);
-		
-		}
-		break;
-	}
 	case MainWindow::MWShapeState::Null:
 	{
 		while (!wnd.mouse.IsEmpty())

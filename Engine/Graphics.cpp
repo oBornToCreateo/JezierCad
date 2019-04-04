@@ -459,7 +459,8 @@ void Graphics::DrawBezier(const JC_Point2d & P, const JC_Point2d & Q, const JC_P
 }
 
 
-void Graphics::DrawBezier(std::vector<JC_Point2d> point_data, Color color) noexcept
+
+void Graphics::DrawMPBezier(std::vector<JC_Point2d> point_data, Color color) noexcept
 {
 /*	const auto range0 = (Q - P);
 	const auto range1 = (R - Q);
@@ -477,99 +478,6 @@ void Graphics::DrawBezier(std::vector<JC_Point2d> point_data, Color color) noexc
 	}
 */
 }
-
-
-/*
-void Graphics::DrawCircle(double Ox, double Oy, double R, Color& c)
-{
-	//issue with continuity drawing for large circles
-	
-	for (double theta = 0; theta < 360; theta += 0.2)
-	{
-		double x = (double)(R * std::cos(PI_D*theta / 180));
-		double y = (double)(R * std::sin(PI_D*theta / 180));
-
-		int xi = (int)(x + 0.5f + Ox);
-		int yi = (int)(y + 0.5f + Oy);
-
-		if (xi >= 0 && xi < ScreenWidth && yi >= 0 && yi < ScreenHeight)
-			PutPixel(xi, yi, c);
-	}
-	
-
-
-	double x = 0.7071067811865475;
-	
-	double Rx = (x * R) + 0.5;
-	
-	double radsqr = R * R;
-	
-	//draw Circle with per pixel clipping
-
-	for (int xi = 0; xi <= (int)Rx; xi++)
-	{
-		int yi = (int)(std::sqrt(radsqr - (xi*xi)) + 0.5f);
-
-
-		if (Ox + xi >= 0 && Ox + xi < ScreenWidth - 1 && Oy + yi >= 0 && Oy + yi < ScreenHeight-1)
-			PutPixel((int)Ox + xi, (int)Oy + yi, c);									   
-																						   
-		if (Ox + yi >= 0 && Ox + yi < ScreenWidth - 1 && Oy + xi >= 0 && Oy + xi < ScreenHeight-1)
-			PutPixel((int)Ox + yi, (int)Oy + xi, c);									   
-																						   
-		if (Ox -xi >= 0 && Ox -xi < ScreenWidth - 1 && Oy + yi >= 0 && Oy + yi <   ScreenHeight-1)
-			PutPixel((int)Ox - xi, (int)Oy + yi, c);									   
-																						   
-		if (Ox -yi >= 0 && Ox -yi < ScreenWidth - 1 && Oy + xi >= 0 && Oy + xi <   ScreenHeight-1)
-			PutPixel((int)Ox - yi, (int)Oy + xi, c);									   
-																						   
-		if (Ox -xi >= 0 && Ox -xi < ScreenWidth - 1 && Oy -yi >= 0 && Oy -yi <     ScreenHeight-1)
-			PutPixel((int)Ox - xi, (int)Oy - yi, c);									   
-																						   
-		if (Ox -yi >= 0 && Ox-yi < ScreenWidth - 1 && Oy -xi >= 0 && Oy -xi <	   ScreenHeight-1)
-			PutPixel((int)Ox - yi, (int)Oy - xi, c);									   
-																						   
-		if (Ox + xi >= 0 && Ox + xi < ScreenWidth-1 && Oy -yi >= 0 && Oy -yi < ScreenHeight-1)
-			PutPixel((int)Ox + xi, (int)Oy - yi, c);									   
-
-		if (Ox + yi >= 0 && Ox + yi < ScreenWidth-1 && Oy -xi >= 0 && Oy -xi < ScreenHeight-1)
-			PutPixel((int)Ox + yi, (int)Oy - xi, c);
-	}
-		       
-	
-}
-*/
-
-
-
-/*
-void Graphics::DrawArc(double Ox, double Oy, double R , double theta_begin, double theta_end, Color c)
-{
-
-	bool theta_range = theta_end - theta_begin > 0.0;
-
-
-	if (theta_begin == theta_end)
-	{
-		DrawCircle(Ox, Oy ,R,c);
-	}
-	else
-	{
-		for (double theta = theta_begin;
-			theta_range ? theta < theta_end : theta > theta_end;
-			theta_range ? theta += 0.2 : theta -= 0.2)
-		{
-			double x = (double)(R * std::cos(PI_F*theta / 180));
-			double y = (double)(R * std::sin(PI_F*theta / 180));
-
-				
-			//Draw arc
-			PutPixel((int)(x + 0.5f + Ox), (int)(y + 0.5f + Oy), c);
-		}
-	}
-}
-*/
-
 
 
 //////////////////////////////////////////////////
@@ -612,4 +520,107 @@ std::wstring Graphics::Exception::GetErrorDescription() const
 std::wstring Graphics::Exception::GetExceptionType() const
 {
 	return L"Chili Graphics Exception";
+}
+
+
+
+void Graphics::DrawTriangle(const JC_Point2d& v0, const JC_Point2d& v1, const JC_Point2d& v2, Color c)
+{
+	// using pointers so we can swap (for sorting purposes)
+	const JC_Point2d* pv0 = &v0;
+	const JC_Point2d* pv1 = &v1;
+	const JC_Point2d* pv2 = &v2;
+
+	// sorting vertices by y
+	if (pv1->y < pv0->y) std::swap(pv0, pv1);
+	if (pv2->y < pv1->y) std::swap(pv1, pv2);
+	if (pv1->y < pv0->y) std::swap(pv0, pv1);
+
+	if (pv0->y == pv1->y) // natural flat top
+	{
+		// sorting top vertices by x
+		if (pv1->x < pv0->x) std::swap(pv0, pv1);
+		DrawFlatTopTriangle(*pv0, *pv1, *pv2, c);
+	}
+	else if (pv1->y == pv2->y) // natural flat bottom
+	{
+		// sorting bottom vertices by x
+		if (pv2->x < pv1->x) std::swap(pv1, pv2);
+		DrawFlatBottomTriangle(*pv0, *pv1, *pv2, c);
+	}
+	else // general triangle
+	{
+		// find splitting vertex
+		const double alphaSplit =
+			(pv1->y - pv0->y) /
+			(pv2->y - pv0->y);
+		const JC_Point2d vi = *pv0 + (*pv2 - *pv0) * alphaSplit;
+
+		if (pv1->x < vi.x) // major right
+		{
+			DrawFlatBottomTriangle(*pv0, *pv1, vi, c);
+			DrawFlatTopTriangle(*pv1, vi, *pv2, c);
+		}
+		else // major left
+		{
+			DrawFlatBottomTriangle(*pv0, vi, *pv1, c);
+			DrawFlatTopTriangle(vi, *pv1, *pv2, c);
+		}
+	}
+}
+
+void Graphics::DrawFlatTopTriangle(const JC_Point2d& v0, const JC_Point2d& v1, const JC_Point2d& v2, Color c)
+{
+	// calulcate slopes in screen space
+	double m0 = (v2.x - v0.x) / (v2.y - v0.y);
+	double m1 = (v2.x - v1.x) / (v2.y - v1.y);
+
+	// calculate start and end scanlines
+	const int yStart = (int)ceilf(v0.y - 0.5f);
+	const int yEnd = (int)ceilf(v2.y - 0.5f); // the scanline AFTER the last line drawn
+
+	for (int y = yStart; y < yEnd; y++)
+	{
+		// caluclate start and end points (x-coords)
+		// add 0.5 to y value because we're calculating based on pixel CENTERS
+		const float px0 = m0 * (float(y) + 0.5f - v0.y) + v0.x;
+		const float px1 = m1 * (float(y) + 0.5f - v1.y) + v1.x;
+
+		// calculate start and end pixels
+		const int xStart = (int)ceilf(px0 - 0.5f);
+		const int xEnd = (int)ceilf(px1 - 0.5f); // the pixel AFTER the last pixel drawn
+
+		for (int x = xStart; x < xEnd; x++)
+		{
+			PutPixel(x, y, c);
+		}
+	}
+}
+
+void Graphics::DrawFlatBottomTriangle(const JC_Point2d& v0, const JC_Point2d& v1, const JC_Point2d& v2, Color c)
+{
+	// calulcate slopes in screen space
+	double m0 = (v1.x - v0.x) / (v1.y - v0.y);
+	double m1 = (v2.x - v0.x) / (v2.y - v0.y);
+
+	// calculate start and end scanlines
+	const int yStart = (int)ceilf(v0.y - 0.5f);
+	const int yEnd = (int)ceilf(v2.y - 0.5f); // the scanline AFTER the last line drawn
+
+	for (int y = yStart; y < yEnd; y++)
+	{
+		// caluclate start and end points
+		// add 0.5 to y value because we're calculating based on pixel CENTERS
+		const float px0 = m0 * (float(y) + 0.5f - v0.y) + v0.x;
+		const float px1 = m1 * (float(y) + 0.5f - v0.y) + v0.x;
+
+		// calculate start and end pixels
+		const int xStart = (int)ceilf(px0 - 0.5f);
+		const int xEnd = (int)ceilf(px1 - 0.5f); // the pixel AFTER the last pixel drawn
+
+		for (int x = xStart; x < xEnd; x++)
+		{
+			PutPixel(x, y, c);
+		}
+	}
 }

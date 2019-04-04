@@ -12,15 +12,14 @@
 class JC_MP_Bezier : public JC_Shape
 {
 public:
-	JC_MP_Bezier(std::vector<JC_Point2d> &line, Color color_in = Colors::White)
+	JC_MP_Bezier(std::vector<JC_Point2d> point_data, Color color_in = Colors::White)
 		:
-		point_data(line),
-		JC_Shape(color_in)
+		JC_Shape(color_in, point_data)
 	{}
 
 	void Draw(Camera cam) override
 	{
-		cam.DrawMPBezier(point_data, Base_Color);
+		cam.DrawMPBezier(PointData, Base_Color);
 	}
 	bool IsInRange(const JC_Point2d& M) override
 	{
@@ -35,6 +34,4 @@ public:
 
 	}
 
-private:
-	std::vector<JC_Point2d> point_data;
 };

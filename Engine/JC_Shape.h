@@ -1,19 +1,21 @@
 #pragma once
 #include "JC_Vector2.h"
 #include "Camera.h"
+#include "Graphics.h"
 class JC_Shape
 
 {
 public:
 
 
-	void virtual Draw(Camera cam) = 0;
-	bool virtual IsInRange(const JC_Point2d& M) = 0;
-	std::wstring virtual MakeDescription() = 0;
+	virtual void Draw(Camera cam) = 0;
+	virtual bool IsInRange(const JC_Point2d& M) = 0;
+	virtual std::wstring MakeDescription() = 0;
+	//virtual void DrawOnPoint() = 0;
 
 	void UpdateColor()
 	{
-		if (selectedflag)
+		if (SelectionFlag)
 			Base_Color = Colors::Yellow;
 		else
 			Base_Color = Colors::White;
@@ -21,31 +23,33 @@ public:
 
 	void SetSelectionFlag(bool flag)
 	{
-		selectedflag = flag;
+		SelectionFlag = flag;
 	}
-
 
 	bool ReadyForRemoval() const
 	{
-		return selectedflag;
+		return SelectionFlag;
 	}
 
 	bool IsSelected() const
 	{
-		return selectedflag;
+		return SelectionFlag;
 	}
-
+	
 protected:
 
-	JC_Shape( Color& color_in)
+	JC_Shape( Color& color_in, std::vector<JC_Point2d> PointData)
 		:
-		Base_Color(color_in)
+		Base_Color(color_in),
+		PointData(PointData)
 	{}
 
+
+	std::vector<JC_Point2d> PointData;
 	Color Base_Color;
 	static constexpr double halfwidth = 20.0;
 
-private:
-	bool selectedflag = false;
 
+private:
+	bool SelectionFlag = false;
 };

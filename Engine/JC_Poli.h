@@ -7,15 +7,14 @@ class JC_Poliline : public JC_Shape
 public:
 	JC_Poliline(std::vector<JC_Point2d> point_data, Color color_in = Colors::White)
 		:
-		PointData(point_data),
-		JC_Shape(color_in)
+		JC_Shape(color_in, point_data)
 	{}
 
 	void Draw(Camera cam) override
 	{
 		cam.DrawPoliLine(PointData, Base_Color);
 	}
-
+		
 	bool IsInRange(const JC_Point2d& M) override
 	{
 		JC_Point2d Current;
@@ -42,6 +41,5 @@ public:
 		return	std::wstring(L"Not yet operatable");
 	}
 
-private:
-	std::vector<JC_Point2d> PointData;
+
 };

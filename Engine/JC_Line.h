@@ -10,8 +10,7 @@ public:
 		:
 		P(P_in),
 		Q(Q_in),
-		JC_Shape(color_in)
-	{}
+		JC_Shape(color_in, { P_in,Q_in }) {}
 
 	void Draw(Camera cam) override
 	{
@@ -43,7 +42,5 @@ public:
 			
 	}
 
-private:
-	JC_Point2d P, Q; //Start and end points of the line
-
+p
 };

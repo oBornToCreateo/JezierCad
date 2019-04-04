@@ -33,9 +33,9 @@
 #include "JC_Vector2.h"
 #include "JC_Math.h"
 #include "JC_Circle.h"
-#include "JC_Line.h"
+
 #include "JC_Poli.h"
-#include "ALIB_Bezier.h"
+
 
 
 class Game
@@ -73,7 +73,7 @@ private:
 	bool second_point_engagement = false;
 	   
 	JC_Point2d P, Q, R;
-	std::vector<JC_Point2d> point_data;
+	std::vector<JC_Point2d> PointData;
 	
 	/********************************/
 

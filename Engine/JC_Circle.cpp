@@ -1,20 +1,19 @@
 #include "JC_Circle.h"
 
-JC_Circle::JC_Circle(const JC_Point2d& P_in, const JC_Point2d& Q_in, Color color_in)
+JC_Circle::JC_Circle(std::vector<JC_Point2d> PointData, Color color)
 	:
-	JC_Shape(color_in),
-	O(P_in),
-	radius(GetDistanceTo(P_in, Q_in))
-	
-{}
+	JC_Shape(color,PointData),
+	O(PointData.size() == 2 ? 
+		//Get Centre of 2point Circle
+		PointData[0] : 
+		//Get Centre of 3Point Circle
+		CalculateCentre(PointData[0], PointData[1], PointData[2])),
 
-
-JC_Circle::JC_Circle(const JC_Point2d& P_in, const JC_Point2d& Q_in, const JC_Point2d& R_in, Color color_in)
-	:
-	JC_Shape(color_in),
-	O(CalculateCentre(P_in, Q_in, R_in)),
-	radius(GetDistanceTo(O, R_in))
-
+	radius(PointData.size() == 2 ?
+		//Get Radius of 2point Circle
+		GetDistanceTo(O ,PointData[1]):
+		//Get Radius of 2point Circle
+		GetDistanceTo(CalculateCentre(PointData[0], PointData[1], PointData[2]), PointData[2]))
 {}
 
 

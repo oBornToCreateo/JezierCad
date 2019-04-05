@@ -145,7 +145,7 @@
     <ClInclude Include="COMInitializer.h" />
     <ClInclude Include="CordinateTrasformerh.h" />
     <ClInclude Include="DXErr.h" />
-    <ClInclude Include="Game.h" />
+    <ClInclude Include="JC_Main.h" />
     <ClInclude Include="Graphics.h" />
     <ClInclude Include="ChiliUtil.h" />
     <ClInclude Include="JC_Math.h" />
@@ -166,7 +166,7 @@
     <ClCompile Include="JC_Circle.cpp" />
     <ClCompile Include="COMInitializer.cpp" />
     <ClCompile Include="DXErr.cpp" />
-    <ClCompile Include="Game.cpp" />
+    <ClCompile Include="JC_Main.cpp" />
     <ClCompile Include="Graphics.cpp" />
     <ClCompile Include="JC_Math.cpp" />
     <ClCompile Include="JC_MP_Bezier.h" />

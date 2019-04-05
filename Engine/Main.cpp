@@ -19,7 +19,7 @@
 *	along with The Chili DirectX Framework.  If not, see <http://www.gnu.org/licenses/>.  *
 ******************************************************************************************/
 #include "MainWindow.h"
-#include "Game.h"
+#include "JC_Main.h"
 #include "ChiliException.h"
 
 int WINAPI wWinMain( HINSTANCE hInst,HINSTANCE,LPWSTR pArgs,INT )
@@ -29,10 +29,10 @@ int WINAPI wWinMain( HINSTANCE hInst,HINSTANCE,LPWSTR pArgs,INT )
 		MainWindow wnd( hInst,pArgs );		
 		try
 		{
-			Game theGame( wnd );
+			JCMain theJCMain( wnd );
 			while( wnd.ProcessMessage() )
 			{
-				theGame.Go();
+				theJCMain.Go();
 			}
 		}
 		catch( const ChiliException& e )

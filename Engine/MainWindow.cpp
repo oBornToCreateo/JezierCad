@@ -22,7 +22,7 @@
 #include "Resource.h"
 #include "Graphics.h"
 #include "ChiliException.h"
-#include "Game.h"
+#include "JC_Main.h"
 #include <assert.h>
 
 MainWindow::MainWindow( HINSTANCE hInst,wchar_t * pArgs )

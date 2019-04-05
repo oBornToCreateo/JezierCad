@@ -38,12 +38,12 @@
 
 
 
-class Game
+class JCMain
 {
 public:
-	Game( class MainWindow& wnd );
-	Game( const Game& ) = delete;
-	Game& operator=( const Game& ) = delete;
+	JCMain( class MainWindow& wnd );
+	JCMain( const JCMain& ) = delete;
+	JCMain& operator=( const JCMain& ) = delete;
 	void Go();
 
 

@@ -1,6 +1,6 @@
 /****************************************************************************************** 
  *	Chili DirectX Framework Version 16.07.20											  *	
- *	Game.cpp																			  *
+ *	JCMain.cpp																			  *
  *	Copyright 2016 PlanetChili.net <http://www.planetchili.net>							  *
  *																						  *
  *	This file is part of The Chili DirectX Framework.									  *
@@ -19,25 +19,22 @@
  *	along with The Chili DirectX Framework.  If not, see <http://www.gnu.org/licenses/>.  *
  ******************************************************************************************/
 #include "MainWindow.h"
-#include "Game.h"
+#include "JC_Main.h"
 #include "Mouse.h"
 #include "CordinateTrasformerh.h"
 #include "ChiliUtil.h"
 #include <functional>
 
-Game::Game(MainWindow& wnd)
+JCMain::JCMain(MainWindow& wnd)
 	:
 	wnd(wnd),
 	gfx(wnd),
 	ct(gfx),
 	cam(ct)
-	//,
-	//camCtrl(wnd.mouse,cam)
-
 {	
 }
 
-void Game::Go()
+void JCMain::Go()
 {
 	gfx.BeginFrame();	
 	ProcesInput();
@@ -46,7 +43,7 @@ void Game::Go()
 	gfx.EndFrame();
 }
 
-void Game::ProcesInput()
+void JCMain::ProcesInput()
 {
 	switch (wnd.ShapeState)
 	{
@@ -303,7 +300,7 @@ void Game::ProcesInput()
 	}
 }
 
-void Game::UpdateModel()
+void JCMain::UpdateModel()
 {
 	for (auto &c : Shapes)
 	{
@@ -312,7 +309,7 @@ void Game::UpdateModel()
 	}
 }
 
-void Game::ComposeFrame()
+void JCMain::ComposeFrame()
 {
 	for (auto &c : Shapes)
 	{

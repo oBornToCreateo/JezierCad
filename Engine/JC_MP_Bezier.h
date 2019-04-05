@@ -16,7 +16,16 @@ public:
 		:
 		JC_Shape(color_in, point_data)
 	{}
-
+	void JC_MP_Bezier::DrawOnPoint(Camera cam) override
+	{
+		if(IsSelected())
+		{
+			for (int i = 0; i < PointData.size(); ++i)
+			{
+				cam.DrawCircle(PointData[i], halfwidth / 2, 1, Colors::Red);
+			}
+		}
+	}
 	void Draw(Camera cam) override
 	{
 		cam.DrawMPBezier(PointData, Base_Color);

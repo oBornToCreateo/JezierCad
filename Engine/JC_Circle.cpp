@@ -29,3 +29,11 @@ bool JC_Circle::IsInRange(const JC_Point2d& mouse_in)
 	return (distance <= (radius + halfwidth) &&
 		distance >= (radius - halfwidth));
 }
+
+void JC_Circle::DrawOnPoint(Camera cam)
+{
+	if (IsSelected())
+	{
+		cam.DrawCircle(O, halfwidth/2, 1, Colors::Red);
+	}
+}

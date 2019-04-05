@@ -308,6 +308,7 @@ void Game::UpdateModel()
 	for (auto &c : Shapes)
 	{
 		c.get()->UpdateColor();
+		c.get()->DrawOnPoint(cam);
 	}
 }
 

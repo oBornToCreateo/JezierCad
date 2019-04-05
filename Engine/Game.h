@@ -80,13 +80,3 @@ private:
 };
 
 
-//enum class GameCreationState
-	//{
-	//	Null,
-	//	FirstPoint,
-	//	SecondPoint,
-	//	ThirdPoint,
-	//	NextPoint,
-	//	Count
-	//};
-	//GameCreationState CreoState = GameCreationState::Null;

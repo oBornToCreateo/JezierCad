@@ -41,5 +41,14 @@ public:
 		return	std::wstring(L"Not yet operatable");
 	}
 
-
+	void JC_Poliline::DrawOnPoint(Camera cam) override
+	{
+		if(IsSelected())
+		{
+			for (int i = 0; i < PointData.size(); ++i)
+			{
+				cam.DrawCircle(PointData[i], halfwidth / 2, 1, Colors::Red);
+			}
+		}
+	}
 };

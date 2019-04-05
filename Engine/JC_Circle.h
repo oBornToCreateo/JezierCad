@@ -10,7 +10,7 @@ public:
 	
 	void Draw(Camera cam_in) override;
 	bool IsInRange(const JC_Point2d& mouse_in) override;
-		
+	void DrawOnPoint(Camera cam) override;
 
 
 	std::wstring MakeDescription() override

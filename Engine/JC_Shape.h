@@ -11,7 +11,7 @@ public:
 	virtual void Draw(Camera cam) = 0;
 	virtual bool IsInRange(const JC_Point2d& M) = 0;
 	virtual std::wstring MakeDescription() = 0;
-	//virtual void DrawOnPoint() = 0;
+	virtual void DrawOnPoint(Camera cam) = 0;
 
 	void UpdateColor()
 	{
